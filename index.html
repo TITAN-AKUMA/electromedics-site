@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #1b2735, #090a0f);
+      background: #000814; /* Desktop floating orb background reference */
       color: #eaeaea;
       overflow-x: hidden;
       margin: 0;
@@ -18,22 +18,23 @@
       flex-direction: column;
     }
 
+    /* 🌌 Floating Orb Background for desktop */
     body::before {
       content: "";
       position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, #00ff8844 5%, transparent 30%),
-                    radial-gradient(circle, #007bff44 5%, transparent 30%);
-      animation: rotate 20s linear infinite;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 20% 30%, #00ff8844 0%, transparent 40%),
+                  radial-gradient(circle at 80% 70%, #007bff44 0%, transparent 35%),
+                  radial-gradient(circle at 50% 50%, #00ffaa22 0%, transparent 45%);
+      animation: moveOrbs 18s ease-in-out infinite alternate;
       z-index: -1;
-      opacity: 0.2;
     }
 
-    @keyframes rotate {
-      100% { transform: rotate(360deg); }
+    @keyframes moveOrbs {
+      0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+      50% { background-position: 50% 20%, 50% 80%, 60% 40%; }
+      100% { background-position: 100% 0%, 0% 100%, 40% 60%; }
     }
 
     nav {
@@ -55,14 +56,9 @@
       gap: 10px;
     }
 
-    .logo-section h1 {
-      text-shadow: 0 0 6px #00FF8844;
-    }
+    .logo-section h1 { text-shadow: 0 0 6px #00FF8844; }
 
-    .logo-section img {
-      width: 40px;
-      height: auto;
-    }
+    .logo-section img { width: 40px; height: auto; }
 
     .nav-links {
       display: flex;
@@ -76,10 +72,7 @@
       transition: 0.3s;
     }
 
-    .nav-links a:hover {
-      color: #00FF88;
-      text-shadow: 0 0 8px #00FF88;
-    }
+    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; }
 
     .sidebar {
       position: fixed;
@@ -96,38 +89,11 @@
       z-index: 999;
     }
 
-    .sidebar.active {
-      left: 0;
-      animation: slideIn 0.6s ease-out forwards;
-    }
+    .sidebar.active { left: 0; }
 
-    @keyframes slideIn {
-      from { transform: translateX(-100px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
+    .sidebar ul { list-style: none; padding: 0; }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar ul li {
-      margin: 25px 0;
-      text-align: center;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-    }
-
-    .sidebar.active ul li:nth-child(1) { animation-delay: 0.2s; }
-    .sidebar.active ul li:nth-child(2) { animation-delay: 0.4s; }
-    .sidebar.active ul li:nth-child(3) { animation-delay: 0.6s; }
-    .sidebar.active ul li:nth-child(4) { animation-delay: 0.8s; }
-    .sidebar.active ul li:nth-child(5) { animation-delay: 1s; }
-
-    @keyframes fadeUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+    .sidebar ul li { margin: 25px 0; text-align: center; }
 
     .sidebar ul li a {
       color: #dcdcdc;
@@ -136,10 +102,7 @@
       transition: 0.3s;
     }
 
-    .sidebar ul li a:hover {
-      color: #00FF88;
-      text-shadow: 0 0 10px #00FF88;
-    }
+    .sidebar ul li a:hover { color: #00FF88; text-shadow: 0 0 10px #00FF88; }
 
     .menu-toggle {
       display: none;
@@ -148,12 +111,7 @@
       gap: 5px;
     }
 
-    .menu-toggle div {
-      width: 25px;
-      height: 3px;
-      background: white;
-      border-radius: 3px;
-    }
+    .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
 
     section {
       flex: 1;
@@ -177,12 +135,12 @@
       color: #c9c9c9;
     }
 
-    /* 🔥 Mobile-only animations */
+    /* 🔥 Mobile-only animations remain same */
     @media screen and (max-width: 900px) {
+      body::before { display: none; } /* Disable desktop orbs on mobile */
       .nav-links { display: none; }
       .menu-toggle { display: flex; }
 
-      /* Floating background orbs */
       body::after {
         content: "";
         position: fixed;
@@ -201,16 +159,6 @@
         0% { background-position: 0 0, 100% 100%; }
         50% { background-position: 100% 0, 0 100%; }
         100% { background-position: 0 0, 100% 100%; }
-      }
-
-      /* Logo stays steady */
-      .logo-section h1 {
-        text-shadow: 0 0 6px #00FF8844;
-      }
-
-      /* Section fade in */
-      section div {
-        animation: fadeUp 1.2s ease-in-out;
       }
     }
   </style>
@@ -260,33 +208,17 @@
     let startX = 0, endX = 0;
 
     function toggleMenu(force) {
-      if (force === "open") {
-        sidebar.classList.add("active");
-      } else if (force === "close") {
-        sidebar.classList.remove("active");
-      } else {
-        sidebar.classList.toggle("active");
-      }
+      if (force === "open") sidebar.classList.add("active");
+      else if (force === "close") sidebar.classList.remove("active");
+      else sidebar.classList.toggle("active");
     }
 
-    // Touch events for swipe
-    document.addEventListener("touchstart", (e) => {
-      startX = e.touches[0].clientX;
-    });
-
+    document.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; });
     document.addEventListener("touchend", (e) => {
       endX = e.changedTouches[0].clientX;
       let diffX = endX - startX;
-
-      // Swipe right → open
-      if (diffX > 80 && !sidebar.classList.contains("active")) {
-        toggleMenu("open");
-      }
-
-      // Swipe left → close
-      if (diffX < -80 && sidebar.classList.contains("active")) {
-        toggleMenu("close");
-      }
+      if (diffX > 80 && !sidebar.classList.contains("active")) toggleMenu("open");
+      if (diffX < -80 && sidebar.classList.contains("active")) toggleMenu("close");
     });
   </script>
 </body>
