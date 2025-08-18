@@ -6,6 +6,9 @@
   <title>ElectroMedics</title>
   <link rel="icon" href="electromedics_background.png">
   <style>
+    *{
+      cursor: default;
+    }
     body {
       font-family: Arial, sans-serif;
       background: #000814;
@@ -62,13 +65,15 @@
     .nav-links {
       display: flex;
       gap: 20px;
+      cursor: pointer;
     }
     .nav-links a {
-      color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s;
+      color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s;cursor: pointer;
     }
     .nav-links a:hover {
       color: #00FF88;
       text-shadow: 0 0 8px #00FF88;
+      cursor: pointer;
     }
 
     /* Sidebar (mobile) */
@@ -200,17 +205,17 @@
     <div class="project-card">
       <h3>Aqua Alert System</h3>
       <p>An early flood and water-level detection system to keep communities safe using IoT sensors.</p>
-      <a href="media.html" class="details-btn">Details</a>
+      <a style="cursor: pointer;" href="media.html" class="details-btn">Details</a>
     </div>
     <div class="project-card">
       <h3>Bluetooth Controlled Smart Rover</h3>
       <p>A rover designed to be controlled via Bluetooth, great for automation and exploration tasks.</p>
-      <a href="media.html" class="details-btn">Details</a>
+      <a style="cursor: pointer;" href="media.html" class="details-btn">Details</a>
     </div>
     <div class="project-card">
       <h3>RoadRadar – Bike & Car Speed Measurement</h3>
       <p>A radar-based system that measures vehicle speed for smarter traffic and road safety management.</p>
-      <a href="media.html" class="details-btn">Details</a>
+      <a style="cursor: pointer;" href="media.html" class="details-btn">Details</a>
     </div>
   </div>
 

@@ -6,12 +6,11 @@
   <title>Join Us | ElectroMedics</title>
   <link rel="icon" href="electromedics_background.png">
   <style>
+    * { cursor: default; margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: Arial, sans-serif;
-      background: #000814; /* deep space black */
+      background: #000814;
       color: #eaeaea;
-      margin: 0;
-      padding: 0;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -32,9 +31,11 @@
     }
 
     @keyframes moveOrbs {
-      0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
-      50% { background-position: 50% 20%, 50% 80%, 60% 40%; }
-      100% { background-position: 100% 0%, 0% 100%, 40% 60%; }
+      0%   { background-position: 10% 20%, 80% 70%, 50% 50%; }
+      25%  { background-position: 20% 50%, 70% 60%, 60% 40%; }
+      50%  { background-position: 50% 30%, 50% 80%, 40% 60%; }
+      75%  { background-position: 30% 10%, 80% 50%, 60% 30%; }
+      100% { background-position: 10% 20%, 80% 70%, 50% 50%; }
     }
 
     /* Navbar */
@@ -53,11 +54,9 @@
     .logo-section { display: flex; align-items: center; gap: 10px; }
     .logo-section h1 { text-shadow: 0 0 6px #00FF8844; }
     .logo-section img { width: 40px; height: auto; }
-    .nav-links { display: flex; gap: 20px; }
-    .nav-links a {
-      color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s;
-    }
-    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; }
+    .nav-links { display: flex; gap: 20px; cursor: pointer; }
+    .nav-links a { color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer; }
+    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; cursor: pointer;}
     .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
     .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
 
@@ -100,17 +99,19 @@
       margin-bottom: 35px;
     }
 
-    /* Join Box */
+    /* Join Box Glow Upgrade */
     .join-box {
       background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(0,255,136,0.2);
-      border-radius: 15px;
+      border: 1px solid rgba(0,255,136,0.25);
+      border-radius: 18px;
       padding: 30px;
       max-width: 500px;
       width: 100%;
-      box-shadow: 0 0 15px rgba(0,255,136,0.15);
-      backdrop-filter: blur(6px);
+      box-shadow: 0 0 20px rgba(0,255,136,0.25), 0 0 60px rgba(0,255,136,0.1) inset;
+      backdrop-filter: blur(8px);
+      transition: 0.3s;
     }
+    .join-box:hover { transform: scale(1.02); }
     .join-box input, .join-box textarea {
       width: 100%;
       margin-bottom: 15px;
@@ -144,13 +145,8 @@
     }
 
     /* Responsive */
-    @media screen and (max-width: 900px) {
-      .nav-links { display: none; }
-      .menu-toggle { display: flex; }
-    }
-    @media screen and (max-width: 768px) {
-      section { padding: 40px 20px; }
-    }
+    @media screen and (max-width: 900px) { .nav-links { display: none; } .menu-toggle { display: flex; } }
+    @media screen and (max-width: 768px) { section { padding: 40px 20px; } }
   </style>
 </head>
 <body>
@@ -174,7 +170,7 @@
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
-    <ul>
+    <ul >
       <li><a href="index.html">HOME</a></li>
       <li><a href="about.html">ABOUT US</a></li>
       <li><a href="projects.html">PROJECTS</a></li>
@@ -194,9 +190,9 @@
 
     <div class="join-box">
       <form>
-        <input type="text" placeholder="Full Name" required>
-        <input type="email" placeholder="Email Address" required>
-        <textarea rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
+        <input style="cursor: auto;" type="text" placeholder="Full Name" required>
+        <input style="cursor: auto;" type="email" placeholder="Email Address" required>
+        <textarea style="cursor: auto;" rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
         <input type="file" accept=".pdf,.doc,.docx" required>
         <button type="submit">🚀 Let’s Build the Future</button>
       </form>
@@ -205,42 +201,31 @@
 
   <script>
     const sidebar = document.getElementById("sidebar");
-    let startX = 0;
-    let currentX = 0;
-    let touching = false;
+    let startX=0, currentX=0, touching=false;
 
-    function toggleMenu() {
-      sidebar.classList.toggle("active");
-    }
+    function toggleMenu(){ sidebar.classList.toggle("active"); }
 
-    // Swipe for mobile sidebar
-    sidebar.addEventListener("touchstart", (e) => {
+    sidebar.addEventListener("touchstart", e => {
       startX = e.touches[0].clientX;
       touching = true;
       sidebar.style.transition = "none";
     });
 
-    sidebar.addEventListener("touchmove", (e) => {
-      if (!touching) return;
+    sidebar.addEventListener("touchmove", e => {
+      if(!touching) return;
       currentX = e.touches[0].clientX;
       let diff = currentX - startX;
-      if (sidebar.classList.contains("active")) {
-        sidebar.style.left = Math.min(diff, 0) + "px";
-      } else {
-        sidebar.style.left = Math.min(diff - 240, 0) + "px";
-      }
+      if(sidebar.classList.contains("active")) sidebar.style.left = Math.min(diff,0)+"px";
+      else sidebar.style.left = Math.min(diff-240,0)+"px";
     });
 
     sidebar.addEventListener("touchend", () => {
-      touching = false;
-      sidebar.style.transition = "0.3s";
-      if (sidebar.classList.contains("active")) {
-        if (currentX - startX < -100) sidebar.classList.remove("active");
-        sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
-      } else {
-        if (currentX - startX > 100) sidebar.classList.add("active");
-        sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
-      }
+      touching=false;
+      sidebar.style.transition="0.3s";
+      const delta = currentX - startX;
+      if(sidebar.classList.contains("active") && delta < -80) sidebar.classList.remove("active");
+      if(!sidebar.classList.contains("active") && delta > 80) sidebar.classList.add("active");
+      sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
     });
   </script>
 </body>
