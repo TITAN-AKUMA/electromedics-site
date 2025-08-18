@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | ElectroMedics</title>
+  <link rel="icon" href="electromedics_background.png">
+  <style>
+    *{
+        cursor: default;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #0d1117, #050505);
+      color: #eaeaea;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Glow background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, #007BFF22, #00FF8822, #007BFF22);
+      animation: rotate 20s linear infinite;
+      z-index: -1;
+      opacity: 0.2;
+    }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+    /* Navbar */
+    nav {
+      background: linear-gradient(90deg, #0f0f1e, #0d213a);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 8%;
+      box-shadow: 0 2px 12px rgba(0,255,136,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo-section { display: flex; align-items: center; gap: 10px; }
+    .logo-section h1 { text-shadow: 0 0 6px #00FF8844; }
+    .logo-section img { width: 40px; }
+
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a {
+      color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s;
+    }
+    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; }
+
+    /* Sidebar (mobile) */
+    .sidebar {
+      position: fixed;
+      top: 0; left: -260px;
+      width: 240px; height: 100%;
+      background: rgba(20,20,30,0.95);
+      backdrop-filter: blur(10px);
+      border-right: 2px solid rgba(0,255,136,0.3);
+      padding-top: 80px;
+      transition: 0.3s;
+      z-index: 999;
+    }
+    .sidebar.active { left: 0; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li { margin: 25px 0; text-align: center; }
+    .sidebar ul li a {
+      color: #dcdcdc; text-decoration: none; font-size: 18px; transition: 0.3s;
+    }
+    .sidebar ul li a:hover { color: #00FF88; text-shadow: 0 0 10px #00FF88; }
+
+    /* Hamburger */
+    .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+    .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
+
+    /* Section Styling */
+    section {
+      flex: 1;
+      padding: 60px 10%;
+      text-align: center;
+    }
+    section h2 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px rgba(0,255,136,0.3);
+    }
+    section p {
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #c9c9c9;
+    }
+
+    /* Values Grid */
+    .values {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .value-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,136,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 12px rgba(0,255,136,0.1);
+    }
+
+    /* CTA */
+    .cta {
+      margin-top: 40px;
+    }
+    .cta a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      background: #00FF88;
+      color: #0d1117;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .cta a:hover {
+      background: #0d1117;
+      color: #00FF88;
+      border: 2px solid #00FF88;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo-section">
+      <img src="electromedics_background.png" alt="Logo">
+      <h1>ElectroMedics</h1>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">HOME</a>
+      <a href="about.html">ABOUT US</a>
+      <a href="projects.html">PROJECTS</a>
+      <a href="media.html">MEDIA</a>
+      <a href="join.html">JOIN US</a>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </nav>
+
+  <!-- Sidebar (Mobile) -->
+  <div class="sidebar" id="sidebar">
+    <ul>
+      <li><a href="index.html">HOME</a></li>
+      <li><a href="about.html">ABOUT US</a></li>
+      <li><a href="projects.html">PROJECTS</a></li>
+      <li><a href="media.html">MEDIA</a></li>
+      <li><a href="join.html">JOIN US</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero Section -->
+  <section>
+    <h2>About ElectroMedics</h2>
+    <p>Engineering the impossible, shaping the future.  
+    ElectroMedics is more than a company—it’s a vision to push the boundaries of imagination, blending innovation, science, and technology to solve challenges that matter.</p>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section>
+    <h2>Our Mission</h2>
+    <p>To design and develop groundbreaking technologies that inspire creativity, empower humanity, and spark a smarter future.</p>
+    <h2>Our Vision</h2>
+    <p>To be a global hub for futuristic innovation—where bold ideas become real solutions, shaping industries and changing lives.</p>
+  </section>
+
+  <!-- Story -->
+  <section>
+    <h2>Our Story</h2>
+    <p>Founded with the dream of going beyond what’s ordinary, ElectroMedics began as a small group of creators determined to think differently.  
+    What started as a passion project is now an emerging powerhouse of innovation, focusing on electronics, AI, and futuristic solutions for a better tomorrow.</p>
+    <p><strong>2025 –</strong> ElectroMedics is born.<br>
+       <strong>2026 –</strong> First breakthrough projects in smart electronics & AI.<br>
+       <strong>Future –</strong> Expanding into robotics, med-tech, and sustainable innovation.</p>
+  </section>
+
+  <!-- Core Values -->
+  <section>
+    <h2>Our Values</h2>
+    <div class="values">
+      <div class="value-box"><h3>💡 Innovation</h3><p>No idea is too big or too bold.</p></div>
+      <div class="value-box"><h3>⚡ Excellence</h3><p>Every project is crafted with precision and passion.</p></div>
+      <div class="value-box"><h3>🌍 Impact</h3><p>We create tech that matters—for people and the planet.</p></div>
+      <div class="value-box"><h3>🤝 Collaboration</h3><p>Together, we go beyond imagination.</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Join the Revolution</h2>
+    <p>Be a part of ElectroMedics. Explore our projects, share ideas, or collaborate with us to shape what’s next.</p>
+    <a href="projects.html">See Our Projects</a>
+    <a href="join.html">Join Us</a>
+  </section>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+  </script>
+</body>
+</html>
