@@ -8,16 +8,17 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #0a0f1a, #1b2735);
+      background: linear-gradient(135deg, #0a0f1a, #1b2735);
       color: #eaeaea;
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* Glow Background */
+    /* Animated Neon Gradient Background */
     body::before {
       content: "";
       position: fixed;
@@ -26,11 +27,12 @@
       width: 200%;
       height: 200%;
       background: conic-gradient(from 0deg, #007BFF22, #00FF8822, #007BFF22);
-      animation: rotate 25s linear infinite;
+      animation: rotate 25s linear infinite, pulse 5s ease-in-out infinite alternate;
       z-index: -1;
       opacity: 0.2;
     }
     @keyframes rotate { 100% { transform: rotate(360deg); } }
+    @keyframes pulse { 0% { opacity: 0.15; } 100% { opacity: 0.35; } }
 
     /* Navbar */
     nav {
@@ -62,6 +64,7 @@
       background: rgba(20, 20, 30, 0.95); backdrop-filter: blur(10px);
       border-right: 2px solid rgba(0,255,136,0.3); box-shadow: 4px 0 20px rgba(0,255,136,0.15);
       padding-top: 80px; transition: 0.3s; z-index: 999;
+      touch-action: pan-y;
     }
     .sidebar.active { left: 0; }
     .sidebar ul { list-style: none; padding: 0; }
@@ -191,19 +194,51 @@
         <input type="text" placeholder="Full Name" required>
         <input type="email" placeholder="Email Address" required>
         <textarea rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
-        
-        <!-- Resume Upload -->
         <input type="file" accept=".pdf,.doc,.docx" required>
-        
         <button type="submit">🚀 Let’s Build the Future</button>
       </form>
     </div>
   </section>
 
   <script>
+    const sidebar = document.getElementById("sidebar");
+    let startX = 0;
+    let currentX = 0;
+    let touching = false;
+
     function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("active");
+      sidebar.classList.toggle("active");
     }
+
+    // Swipe for mobile sidebar
+    sidebar.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+      touching = true;
+      sidebar.style.transition = "none";
+    });
+
+    sidebar.addEventListener("touchmove", (e) => {
+      if (!touching) return;
+      currentX = e.touches[0].clientX;
+      let diff = currentX - startX;
+      if (sidebar.classList.contains("active")) {
+        sidebar.style.left = Math.min(diff, 0) + "px";
+      } else {
+        sidebar.style.left = Math.min(diff - 240, 0) + "px";
+      }
+    });
+
+    sidebar.addEventListener("touchend", () => {
+      touching = false;
+      sidebar.style.transition = "0.3s";
+      if (sidebar.classList.contains("active")) {
+        if (currentX - startX < -100) sidebar.classList.remove("active");
+        sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
+      } else {
+        if (currentX - startX > 100) sidebar.classList.add("active");
+        sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
+      }
+    });
   </script>
 </body>
 </html>

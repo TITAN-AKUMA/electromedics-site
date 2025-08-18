@@ -11,7 +11,7 @@
     }
     body {
       font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #0a1a2f, #000814);
+      background: #000814;
       color: #eaeaea;
       margin: 0;
       padding: 0;
@@ -21,20 +21,23 @@
       overflow-x: hidden;
     }
 
-    /* Glow background */
+    /* 🔥 New Floating Orb Background */
     body::before {
       content: "";
       position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, #007BFF22, #00FF8822, #007BFF22);
-      animation: rotate 20s linear infinite;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 20% 30%, #00ff8844 0%, transparent 40%),
+                  radial-gradient(circle at 80% 70%, #007bff44 0%, transparent 35%),
+                  radial-gradient(circle at 50% 50%, #00ffaa22 0%, transparent 45%);
+      animation: moveOrbs 18s ease-in-out infinite alternate;
       z-index: -1;
-      opacity: 0.2;
     }
-    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    @keyframes moveOrbs {
+      0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+      50% { background-position: 50% 20%, 50% 80%, 60% 40%; }
+      100% { background-position: 100% 0%, 0% 100%, 40% 60%; }
+    }
 
     /* Navbar */
     nav {
@@ -220,8 +223,34 @@
   </section>
 
   <script>
+    const sidebar = document.getElementById("sidebar");
+
     function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("active");
+      sidebar.classList.toggle("active");
+    }
+
+    // ✅ Swipe Gesture for Sidebar
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleGesture();
+    });
+
+    function handleGesture() {
+      if (touchEndX - touchStartX > 80) { 
+        // swipe right → open
+        sidebar.classList.add("active");
+      }
+      if (touchStartX - touchEndX > 80) { 
+        // swipe left → close
+        sidebar.classList.remove("active");
+      }
     }
   </script>
 </body>

@@ -8,48 +8,81 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #0a1a2f, #000814);
+      background: #000814;
       color: #eaeaea;
       margin: 0;
       padding: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
+
+    /* 🌌 Floating Orb Background */
     body::before {
       content: "";
       position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, #00aaff22, #0044ff22, #00aaff22);
-      animation: rotate 20s linear infinite;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 20% 30%, #00ff8844 0%, transparent 40%),
+                  radial-gradient(circle at 80% 70%, #007bff44 0%, transparent 35%),
+                  radial-gradient(circle at 50% 50%, #00ffaa22 0%, transparent 45%);
+      animation: moveOrbs 18s ease-in-out infinite alternate;
       z-index: -1;
-      opacity: 0.25;
     }
-    @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+    @keyframes moveOrbs {
+      0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+      50% { background-position: 50% 20%, 50% 80%, 60% 40%; }
+      100% { background-position: 100% 0%, 0% 100%, 40% 60%; }
+    }
+
+    /* Navbar */
     nav {
-      background: linear-gradient(90deg, #071122, #0c2440);
+      background: linear-gradient(90deg, #0f0f1e, #0d213a);
       color: white;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 15px 8%; box-shadow: 0 2px 12px rgba(0,170,255,0.3);
-      position: sticky; top: 0; z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 8%;
+      box-shadow: 0 2px 12px rgba(0,255,136,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-    .logo-section { display: flex; align-items: center; gap: 10px; }
-    .logo-section h1 { text-shadow: 0 0 6px #00aaff88; }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-section h1 { text-shadow: 0 0 6px #00FF8844; }
     .logo-section img { width: 40px; height: auto; }
-    .nav-links { display: flex; gap: 20px; }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
     .nav-links a {
       color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s;
     }
-    .nav-links a:hover { color: #00aaff; text-shadow: 0 0 8px #00aaff; }
+    .nav-links a:hover {
+      color: #00FF88;
+      text-shadow: 0 0 8px #00FF88;
+    }
+
+    /* Sidebar (mobile) */
     .sidebar {
-      position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
-      background: rgba(10, 20, 40, 0.95); backdrop-filter: blur(10px);
-      border-right: 2px solid rgba(0,170,255,0.3);
-      box-shadow: 4px 0 20px rgba(0,170,255,0.15);
-      padding-top: 80px; transition: 0.3s; z-index: 999;
+      position: fixed;
+      top: 0; left: -260px;
+      width: 240px; height: 100%;
+      background: rgba(20,20,30,0.95);
+      backdrop-filter: blur(10px);
+      border-right: 2px solid rgba(0,255,136,0.3);
+      box-shadow: 4px 0 20px rgba(0,255,136,0.15);
+      padding-top: 80px;
+      transition: 0.3s;
+      z-index: 999;
     }
     .sidebar.active { left: 0; }
     .sidebar ul { list-style: none; padding: 0; }
@@ -57,31 +90,76 @@
     .sidebar ul li a {
       color: #dcdcdc; text-decoration: none; font-size: 18px; transition: 0.3s;
     }
-    .sidebar ul li a:hover { color: #00aaff; text-shadow: 0 0 10px #00aaff; }
+    .sidebar ul li a:hover {
+      color: #00FF88;
+      text-shadow: 0 0 10px #00FF88;
+    }
+
+    /* Hamburger */
     .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
     .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
-    section { flex: 1; text-align: center; padding: 60px 20px; }
-    section h2 { font-size: 2.2rem; margin-bottom: 15px; text-shadow: 0 0 8px rgba(0,170,255,0.4); }
-    section p { max-width: 600px; font-size: 1.1rem; line-height: 1.6; color: #c9c9c9; margin: auto; }
-    .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 40px 8%; }
-    .project-card {
-      background: rgba(10,20,30,0.8); padding: 25px; border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,170,255,0.15); text-align: center; transition: transform 0.3s;
+
+    /* Section */
+    section {
+      flex: 1;
+      text-align: center;
+      padding: 60px 20px;
     }
-    .project-card:hover { transform: translateY(-5px); box-shadow: 0 0 25px rgba(0,170,255,0.3); }
-    .project-card h3 { color: #00aaff; margin-bottom: 12px; }
+    section h2 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px rgba(0,255,136,0.3);
+    }
+    section p {
+      max-width: 600px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #c9c9c9;
+      margin: auto;
+    }
+
+    /* Projects */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 40px 8%;
+    }
+    .project-card {
+      background: rgba(20,20,30,0.8);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,255,136,0.1);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0,255,136,0.2);
+    }
+    .project-card h3 { color: #00FF88; margin-bottom: 12px; }
     .project-card p { color: #ccc; font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; }
     .details-btn {
-      display: inline-block; padding: 10px 18px;
-      background: linear-gradient(90deg, #00aaff, #0044ff);
-      color: black; font-weight: bold; text-decoration: none;
-      border-radius: 8px; transition: 0.3s;
+      display: inline-block;
+      padding: 10px 18px;
+      background: linear-gradient(90deg, #00FF88, #007BFF);
+      color: black;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
     }
     .details-btn:hover { opacity: 0.85; transform: scale(1.05); }
-    @media screen and (max-width: 900px) { .nav-links { display: none; } .menu-toggle { display: flex; } }
+
+    /* Responsive */
+    @media screen and (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+    }
   </style>
 </head>
 <body>
+  <!-- Navbar -->
   <nav>
     <div class="logo-section">
       <img src="electromedics_background.png" alt="Logo">
@@ -94,8 +172,12 @@
       <a href="media.html">MEDIA</a>
       <a href="join.html">JOIN US</a>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
   </nav>
+
+  <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <ul>
       <li><a href="index.html">HOME</a></li>
@@ -105,10 +187,15 @@
       <li><a href="join.html">JOIN US</a></li>
     </ul>
   </div>
+
+  <!-- Welcome -->
   <section>
     <h2>Welcome to ElectroMedics</h2>
-    <p>Shaping the future with innovation, creativity, and technology. Explore our projects and join us in building something beyond imagination.</p>
+    <p>Shaping the future with innovation, creativity, and technology.<br>
+       Explore our projects and join us in building something beyond imagination.</p>
   </section>
+
+  <!-- Projects -->
   <div class="projects">
     <div class="project-card">
       <h3>Aqua Alert System</h3>
@@ -126,6 +213,37 @@
       <a href="media.html" class="details-btn">Details</a>
     </div>
   </div>
-  <script> function toggleMenu() { document.getElementById("sidebar").classList.toggle("active"); } </script>
+
+  <script>
+    const sidebar = document.getElementById("sidebar");
+
+    function toggleMenu() {
+      sidebar.classList.toggle("active");
+    }
+
+    // ✅ Swipe Gesture for Sidebar
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleGesture();
+    });
+
+    function handleGesture() {
+      if (touchEndX - touchStartX > 80) {
+        // swipe right → open
+        sidebar.classList.add("active");
+      }
+      if (touchStartX - touchEndX > 80) {
+        // swipe left → close
+        sidebar.classList.remove("active");
+      }
+    }
+  </script>
 </body>
 </html>
