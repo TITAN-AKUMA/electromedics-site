@@ -49,16 +49,17 @@
       top: 0;
       z-index: 1000;
     }
+
     .logo-section { display: flex; align-items: center; gap: 10px; }
     .logo-section h1 { text-shadow: 0 0 6px #00FF8844; }
     .logo-section img { width: 40px; height: auto; }
+
     .nav-links { display: flex; gap: 20px; cursor: pointer;}
     .nav-links a {
       color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer;
     }
-    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; }
+    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88;cursor: pointer; }
 
-    /* Sidebar for mobile */
     .sidebar {
       position: fixed; top: 0; left: -260px;
       width: 240px; height: 100%;
@@ -79,7 +80,7 @@
     .sidebar ul li a:hover { color: #00FF88; text-shadow: 0 0 10px #00FF88; }
 
     .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
-    .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
+    .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; cursor: pointer;}
 
     section {
       flex: 1;
@@ -89,6 +90,7 @@
       padding: 60px 20px;
     }
 
+    /* 📌 Form Box */
     .form-box {
       background: transparent;
       padding: 2rem;
@@ -98,14 +100,18 @@
       width: 100%;
       text-align: center;
     }
-    .form-box h2 { font-size: 2rem; margin-bottom: 15px; }
-    .form-box p { font-size: 1rem; margin-bottom: 20px; color: #9abac9; }
+    .form-box h2 {
+      font-size: 2rem; margin-bottom: 15px;
+      text-shadow: 0 0 8px rgba(0,255,136,0.4);
+    }
+    .form-box p { font-size: 1rem; margin-bottom: 20px; color: #9abac9; text-shadow: 0 0 8px rgba(0,255,136,0.4);}
 
     input, textarea {
       width: 95%; padding: 12px; margin: 10px 0;
-      border-radius: 10px; border: 1px solid white;
+      border-radius: 10px; border-color: white;
       background: transparent; color: #eaeaea;
       font-size: 15px;
+      cursor: auto;
     }
     input:focus, textarea:focus { outline: 2px solid #00FF88; }
 
@@ -117,6 +123,7 @@
       font-weight: bold; transition: 0.3s;
     }
     button:hover { background: #00cc66; }
+    button:disabled { background:#555; cursor:not-allowed; }
 
     .toast {
       margin-top: 1rem; padding: 12px;
@@ -126,7 +133,7 @@
     .toast.ok { background:#c8f7c5; color:#2d7a2d; }
     .toast.err { background:#f7c5c5; color:#7a2d2d; }
 
-    /* 🔥 Mobile view */
+    /* 🔥 Mobile animations */
     @media screen and (max-width: 900px) {
       body::before { display: none; }
       .nav-links { display: none; }
@@ -186,14 +193,13 @@
   <section>
     <div class="form-box">
       <h2>Join ElectroMedics</h2>
-      <p>Be part of the future. Upload your resume and join our mission 🚀</p>
+      <p>Be part of the future. We’re building projects that push the boundaries...</p>
 
       <form id="contactForm">
         <input id="name" type="text" placeholder="Full Name" required>
         <input id="email" type="email" placeholder="Email Address" required>
         <textarea id="skills" rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
-        <input id="resume" type="file" accept=".pdf,.doc,.docx" required>
-        <button id="submitBtn" type="submit">🚀 Submit & Verify</button>
+        <button id="submitBtn" type="submit">🚀 Let’s Build the Future</button>
         <div id="toast" class="toast"></div>
       </form>
     </div>
@@ -222,13 +228,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
       authDomain: "electromedics-84089.firebaseapp.com",
       projectId: "electromedics-84089",
-      storageBucket: "electromedics-84089.appspot.com",
+      storageBucket: "electromedics-84089.firebasestorage.app",
       messagingSenderId: "1068763862229",
       appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
     };
@@ -236,7 +241,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const storage = getStorage(app);
 
     const form = document.getElementById('contactForm');
     const btn  = document.getElementById('submitBtn');
@@ -254,29 +258,19 @@
       const name   = document.getElementById('name').value.trim();
       const email  = document.getElementById('email').value.trim();
       const skills = document.getElementById('skills').value.trim();
-      const resume = document.getElementById('resume').files[0];
-
-      if(!name || !email || !skills || !resume) return showToast('All fields required!', false);
+      if(!name || !email || !skills) return showToast('All fields required!', false);
 
       const originalText = btn.textContent; 
-      btn.disabled = true; btn.textContent = 'Uploading…';
+      btn.disabled = true; btn.textContent = 'Sending OTP…';
 
       try {
-        // 🔹 Upload resume to Firebase Storage
-        const storageRef = ref(storage, `resumes/${Date.now()}_${resume.name}`);
-        await uploadBytes(storageRef, resume);
-        const resumeURL = await getDownloadURL(storageRef);
-
-        // 🔹 Create user with temp password
         const tempPass = Math.random().toString(36).slice(-8);
         const userCredential = await createUserWithEmailAndPassword(auth, email, tempPass);
         const user = userCredential.user;
 
-        // 🔹 Send verification email
         await sendEmailVerification(user);
-        showToast('Verification email sent 📧', true);
+        showToast('verification sent! Check your email 📧, Just click the link 👆🏼', true);
 
-        // 🔹 Wait until verified
         let verified = false;
         while(!verified){
           await new Promise(r => setTimeout(r, 3000));
@@ -284,19 +278,16 @@
           if(user.emailVerified) verified = true;
         }
 
-        // 🔹 Save to Firestore
         await addDoc(collection(db, 'contacts'), {
-          name, email, skills, resumeURL,
-          createdAt: serverTimestamp(),
-          userAgent: navigator.userAgent
+          name, email, skills, createdAt: serverTimestamp(), userAgent: navigator.userAgent
         });
 
         form.reset();
-        showToast('✅ Verified & Resume uploaded!', true);
+        showToast('Email verified & saved successfully 👋', true);
 
       } catch(err){
         console.error(err);
-        showToast('❌ Error: ' + err.message, false);
+        showToast('Email is alredy used, Try another email 📧 ', false);
       } finally {
         btn.disabled = false; btn.textContent = originalText;
       }
