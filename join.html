@@ -66,6 +66,7 @@
     .join-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.25); border-radius: 18px; padding: 30px; max-width: 500px; width: 100%; box-shadow: 0 0 20px rgba(0,255,136,0.25), 0 0 60px rgba(0,255,136,0.1) inset; backdrop-filter: blur(8px); transition: 0.3s; }
     .join-box:hover { transform: scale(1.02); }
     .join-box input, .join-box textarea { width: 100%; margin-bottom: 15px; padding: 12px; border: none; border-radius: 8px; outline: none; font-size: 1rem; }
+    .join-box input[type="file"] { background: #fff; padding: 10px; border-radius: 8px; cursor: pointer; }
     .join-box button { background: linear-gradient(90deg, #00FF88, #007BFF); color: #fff; border: none; padding: 12px 20px; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 0 12px rgba(0,255,136,0.4); }
     .join-box button:hover { transform: scale(1.05); box-shadow: 0 0 18px rgba(0,255,136,0.6); }
     .toast{margin-top:14px; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1)}
@@ -111,6 +112,12 @@
         <div id="toast" class="toast hide"></div>
       </form>
     </div>
+
+    <div class="join-box hide" id="otpBox">
+      <h3>Check your Email & click the link</h3>
+      <p>An OTP link was sent to your email. Open your email and verify!</p>
+      <div id="otpToast" class="toast hide"></div>
+    </div>
   </section>
 
   <script type="module">
@@ -119,13 +126,13 @@
     import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
-  apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
-  authDomain: "electromedics-84089.firebaseapp.com",
-  projectId: "electromedics-84089",
-  storageBucket: "electromedics-84089.firebasestorage.app",
-  messagingSenderId: "1068763862229",
-  appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
-};
+      apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
+      authDomain: "electromedics-84089.firebaseapp.com",
+      projectId: "electromedics-84089",
+      storageBucket: "electromedics-84089.appspot.com",
+      messagingSenderId: "1068763862229",
+      appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -133,67 +140,68 @@
 
     const form = document.getElementById('contactForm');
     const toast = document.getElementById('toast');
+    const otpBox = document.getElementById('otpBox');
+    const otpToast = document.getElementById('otpToast');
+    const mainFormBox = document.getElementById('mainFormBox');
+
     let userData = {};
-
-    function showToast(msg, ok=true){
-      toast.textContent = msg;
-      toast.classList.remove('hide');
-      toast.classList.toggle('ok', ok);
-      toast.classList.toggle('err', !ok);
-      setTimeout(()=>{ toast.classList.add('hide'); toast.textContent=''; }, 4000);
-    }
-
     const actionCodeSettings = {
       url: window.location.href,
       handleCodeInApp: true
     };
 
-    // Submit form & send email link
+    function showToast(el, msg, ok=true){
+      el.textContent = msg;
+      el.classList.remove('hide');
+      el.classList.toggle('ok', ok);
+      el.classList.toggle('err', !ok);
+      setTimeout(()=>{ el.classList.add('hide'); el.textContent=''; }, 4000);
+    }
+
     form.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const skills = document.getElementById('skills').value.trim();
-      if(!name || !email || !skills) return showToast('All fields required!', false);
+      if(!name || !email || !skills) return showToast(toast,'All fields required!',false);
 
       userData = {name,email,skills};
       try{
-        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-        window.localStorage.setItem('userEmail', email);
-        showToast('✅ Check your email! OTP link sent.');
-        form.reset();
+        await sendSignInLinkToEmail(auth,email,actionCodeSettings);
+        window.localStorage.setItem('emailForSignIn', email);
+        mainFormBox.classList.add('hide');
+        otpBox.classList.remove('hide');
+        showToast(otpToast,'OTP email sent! Check your inbox.');
       }catch(err){
         console.error(err);
-        showToast('Failed to send email!', false);
+        showToast(otpToast,'Failed to send OTP email!',false);
       }
     });
 
-    // Check if link verification
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      let email = window.localStorage.getItem('userEmail');
-      if(!email) email = prompt('Enter your email to verify:');
-      signInWithEmailLink(auth, email, window.location.href)
-        .then(async ()=>{
+    window.addEventListener('load', async ()=>{
+      if(isSignInWithEmailLink(auth, window.location.href)){
+        let email = window.localStorage.getItem('emailForSignIn');
+        if(!email) email = prompt('Enter your email for verification');
+        try{
+          await signInWithEmailLink(auth,email,window.location.href);
           await addDoc(collection(db,'contacts'),{
             ...userData,
+            email,
             createdAt: serverTimestamp(),
             userAgent: navigator.userAgent
           });
-          showToast('✅ Verified & saved successfully!');
-        })
-        .catch(err=>{
+          showToast(otpToast,'Verified & saved successfully!');
+          otpBox.classList.add('hide');
+          mainFormBox.classList.remove('hide');
+        }catch(err){
           console.error(err);
-          showToast('Verification failed!', false);
-        });
-    }
+          showToast(otpToast,'Verification failed!',false);
+        }
+      }
+    });
 
-    // Sidebar toggle
     const sidebar = document.getElementById("sidebar");
-    let startX=0, currentX=0, touching=false;
     function toggleMenu(){ sidebar.classList.toggle("active"); }
-    sidebar.addEventListener("touchstart", e=>{ startX = e.touches[0].clientX; touching=true; sidebar.style.transition="none"; });
-    sidebar.addEventListener("touchmove", e=>{ if(!touching) return; currentX=e.touches[0].clientX; let diff=currentX-startX; sidebar.style.left = sidebar.classList.contains("active") ? Math.min(diff,0)+"px" : Math.min(diff-240,0)+"px"; });
-    sidebar.addEventListener("touchend", ()=>{ touching=false; sidebar.style.transition="0.3s"; const delta=currentX-startX; if(sidebar.classList.contains("active")&&delta<-80) sidebar.classList.remove("active"); if(!sidebar.classList.contains("active")&&delta>80) sidebar.classList.add("active"); sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px"; });
   </script>
 </body>
 </html>
