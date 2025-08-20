@@ -144,6 +144,12 @@
       box-shadow: 0 0 18px rgba(0,255,136,0.6);
     }
 
+    /* Toast message */
+    .toast{margin-top:14px; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1)}
+    .toast.ok{border-color:rgba(34,197,94,.45)}
+    .toast.err{border-color:rgba(239,68,68,.45)}
+    .hide{display:none}
+
     /* Responsive */
     @media screen and (max-width: 900px) { .nav-links { display: none; } .menu-toggle { display: flex; } }
     @media screen and (max-width: 768px) { section { padding: 40px 20px; } }
@@ -189,12 +195,12 @@
     </p>
 
     <div class="join-box">
-      <form>
-        <input style="cursor: auto;" type="text" placeholder="Full Name" required>
-        <input style="cursor: auto;" type="email" placeholder="Email Address" required>
-        <textarea style="cursor: auto;" rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
-        <input type="file" accept=".pdf,.doc,.docx" required>
-        <button type="submit">🚀 Let’s Build the Future</button>
+      <form id="contactForm">
+        <input id="name" type="text" placeholder="Full Name" required>
+        <input id="email" type="email" placeholder="Email Address" required>
+        <textarea id="skills" rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
+        <button id="submitBtn" type="submit">🚀 Let’s Build the Future</button>
+        <div id="toast" class="toast hide"></div>
       </form>
     </div>
   </section>
@@ -226,6 +232,65 @@
       if(sidebar.classList.contains("active") && delta < -80) sidebar.classList.remove("active");
       if(!sidebar.classList.contains("active") && delta > 80) sidebar.classList.add("active");
       sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
+    });
+  </script>
+
+  <!-- Firebase setup -->
+  <script type="module">
+    // 1) Replace with your Firebase project config
+    const firebaseConfig = {
+  apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
+  authDomain: "electromedics-84089.firebaseapp.com",
+  projectId: "electromedics-84089",
+  storageBucket: "electromedics-84089.firebasestorage.app",
+  messagingSenderId: "1068763862229",
+  appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
+};
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('contactForm');
+    const btn  = document.getElementById('submitBtn');
+    const toast = document.getElementById('toast');
+
+    function showToast(msg, ok=true){
+      toast.textContent = msg;
+      toast.classList.remove('hide');
+      toast.classList.toggle('ok', ok);
+      toast.classList.toggle('err', !ok);
+      setTimeout(()=>{ toast.classList.add('hide'); toast.textContent=''; }, 4000);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name   = document.getElementById('name').value.trim();
+      const email  = document.getElementById('email').value.trim();
+      const skills = document.getElementById('skills').value.trim();
+
+      if (!name || !email || !skills) return showToast('All fields required!', false);
+
+      const originalText = btn.textContent; btn.disabled = true; btn.textContent = 'Sending…';
+
+      try {
+        await addDoc(collection(db, 'contacts'), {
+          name,
+          email,
+          skills,
+          createdAt: serverTimestamp(),
+          userAgent: navigator.userAgent
+        });
+        form.reset();
+        showToast('Saved successfully. We\'ll be in touch 👋', true);
+      } catch (err) {
+        console.error('Firebase error:', err);
+        showToast('Not sent. Firebase error — check console.', false);
+      } finally {
+        btn.disabled = false; btn.textContent = originalText;
+      }
     });
   </script>
 </body>
