@@ -6,16 +6,20 @@
   <title>Join Us | ElectroMedics</title>
   <link rel="icon" href="electromedics_background.png">
   <style>
-    * { cursor: default; margin:0; padding:0; box-sizing:border-box; }
+    *{ cursor: default; }
     body {
       font-family: Arial, sans-serif;
       background: #000814;
       color: #eaeaea;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-      overflow-x: hidden;
     }
+
+    /* 🌌 Floating Orb Background for desktop */
     body::before {
       content: "";
       position: fixed;
@@ -28,12 +32,11 @@
       z-index: -1;
     }
     @keyframes moveOrbs {
-      0%   { background-position: 10% 20%, 80% 70%, 50% 50%; }
-      25%  { background-position: 20% 50%, 70% 60%, 60% 40%; }
-      50%  { background-position: 50% 30%, 50% 80%, 40% 60%; }
-      75%  { background-position: 30% 10%, 80% 50%, 60% 30%; }
-      100% { background-position: 10% 20%, 80% 70%, 50% 50%; }
+      0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+      50% { background-position: 50% 20%, 50% 80%, 60% 40%; }
+      100% { background-position: 100% 0%, 0% 100%, 40% 60%; }
     }
+
     nav {
       background: linear-gradient(90deg, #0f0f1e, #0d213a);
       color: white;
@@ -46,40 +49,123 @@
       top: 0;
       z-index: 1000;
     }
+
     .logo-section { display: flex; align-items: center; gap: 10px; }
     .logo-section h1 { text-shadow: 0 0 6px #00FF8844; }
     .logo-section img { width: 40px; height: auto; }
-    .nav-links { display: flex; gap: 20px; cursor: pointer; }
-    .nav-links a { color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer; }
-    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; cursor: pointer;}
-    .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
-    .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
-    .sidebar { position: fixed; top: 0; left: -260px; width: 240px; height: 100%; background: rgba(20, 20, 30, 0.95); backdrop-filter: blur(10px); border-right: 2px solid rgba(0,255,136,0.3); box-shadow: 4px 0 20px rgba(0,255,136,0.15); padding-top: 80px; transition: 0.3s; z-index: 999; touch-action: pan-y; }
+
+    .nav-links { display: flex; gap: 20px; cursor: pointer;}
+    .nav-links a {
+      color: #f0f0f0; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer;
+    }
+    .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88;cursor: pointer; }
+
+    .sidebar {
+      position: fixed; top: 0; left: -260px;
+      width: 240px; height: 100%;
+      background: rgba(20, 20, 30, 0.95);
+      backdrop-filter: blur(10px);
+      border-right: 2px solid rgba(0,255,136,0.3);
+      box-shadow: 4px 0 20px rgba(0, 255, 136, 0.15);
+      padding-top: 80px;
+      transition: 0.4s ease-in-out;
+      z-index: 999;
+    }
     .sidebar.active { left: 0; }
     .sidebar ul { list-style: none; padding: 0; }
     .sidebar ul li { margin: 25px 0; text-align: center; }
-    .sidebar ul li a { color: #dcdcdc; text-decoration: none; font-size: 18px; transition: 0.3s; }
+    .sidebar ul li a {
+      color: #dcdcdc; text-decoration: none; font-size: 18px; transition: 0.3s;
+    }
     .sidebar ul li a:hover { color: #00FF88; text-shadow: 0 0 10px #00FF88; }
-    section { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; }
-    section h2 { font-size: 2.4rem; margin-bottom: 15px; text-shadow: 0 0 10px rgba(0,255,136,0.4); }
-    section p { max-width: 650px; font-size: 1.1rem; line-height: 1.7; color: #c9c9c9; margin-bottom: 35px; }
-    .join-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.25); border-radius: 18px; padding: 30px; max-width: 500px; width: 100%; box-shadow: 0 0 20px rgba(0,255,136,0.25), 0 0 60px rgba(0,255,136,0.1) inset; backdrop-filter: blur(8px); transition: 0.3s; }
-    .join-box:hover { transform: scale(1.02); }
-    .join-box input, .join-box textarea { width: 100%; margin-bottom: 15px; padding: 12px; border: none; border-radius: 8px; outline: none; font-size: 1rem; }
-    .join-box input[type="file"] { background: #fff; padding: 10px; border-radius: 8px; cursor: pointer; }
-    .join-box button { background: linear-gradient(90deg, #00FF88, #007BFF); color: #fff; border: none; padding: 12px 20px; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 0 12px rgba(0,255,136,0.4); }
-    .join-box button:hover { transform: scale(1.05); box-shadow: 0 0 18px rgba(0,255,136,0.6); }
-    .toast{margin-top:14px; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1)}
-    .toast.ok{border-color:rgba(34,197,94,.45)}
-    .toast.err{border-color:rgba(239,68,68,.45)}
-    .hide{display:none}
-    @media screen and (max-width: 900px) { .nav-links { display: none; } .menu-toggle { display: flex; } }
-    @media screen and (max-width: 768px) { section { padding: 40px 20px; } }
+
+    .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+    .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; cursor: pointer;}
+
+    section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    /* 📌 Form Box */
+    .form-box {
+      background: transparent;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 25px rgba(0,255,136,0.2);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    .form-box h2 {
+      font-size: 2rem; margin-bottom: 15px;
+      text-shadow: 0 0 8px rgba(0,255,136,0.4);
+    }
+    .form-box p { font-size: 1rem; margin-bottom: 20px; color: #9abac9; text-shadow: 0 0 8px rgba(0,255,136,0.4);}
+
+    input, textarea {
+      width: 95%; padding: 12px; margin: 10px 0;
+      border-radius: 10px; border-color: white;
+      background: transparent; color: #eaeaea;
+      font-size: 15px;
+      cursor: auto;
+    }
+    input:focus, textarea:focus { outline: 2px solid #00FF88; }
+
+    button {
+      width: 100%; padding: 14px;
+      background: #00FF88; color: #111;
+      border: none; border-radius: 10px;
+      cursor: pointer; font-size: 16px;
+      font-weight: bold; transition: 0.3s;
+    }
+    button:hover { background: #00cc66; }
+    button:disabled { background:#555; cursor:not-allowed; }
+
+    .toast {
+      margin-top: 1rem; padding: 12px;
+      border-radius: 8px; display: none;
+      text-align: center; font-weight: bold;
+    }
+    .toast.ok { background:#c8f7c5; color:#2d7a2d; }
+    .toast.err { background:#f7c5c5; color:#7a2d2d; }
+
+    /* 🔥 Mobile animations */
+    @media screen and (max-width: 900px) {
+      body::before { display: none; }
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+      section { padding: 40px 15px; }
+
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle, #00ff8844 5%, transparent 30%),
+                    radial-gradient(circle, #007bff44 5%, transparent 30%);
+        background-size: 200px 200px;
+        animation: moveBackground 15s linear infinite;
+        z-index: -2;
+      }
+      @keyframes moveBackground {
+        0% { background-position: 0 0, 100% 100%; }
+        50% { background-position: 100% 0, 0 100%; }
+        100% { background-position: 0 0, 100% 100%; }
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Navbar -->
   <nav>
-    <div class="logo-section"><img src="electromedics_background.png" alt="Logo"><h1>ElectroMedics</h1></div>
+    <div class="logo-section">
+      <img src="electromedics_background.png" alt="Logo">
+      <h1>ElectroMedics</h1>
+    </div>
     <div class="nav-links">
       <a href="index.html">HOME</a>
       <a href="about.html">ABOUT US</a>
@@ -87,8 +173,12 @@
       <a href="media.html">MEDIA</a>
       <a href="join.html">JOIN US</a>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
   </nav>
+
+  <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <ul>
       <li><a href="index.html">HOME</a></li>
@@ -99,37 +189,51 @@
     </ul>
   </div>
 
+  <!-- Join Form Section -->
   <section>
-    <h2>Join ElectroMedics</h2>
-    <p>Be part of the future. We’re building projects that push the boundaries of imagination and innovation. Fill out the form below and take your first step into creating something extraordinary with us.</p>
+    <div class="form-box">
+      <h2>Join ElectroMedics</h2>
+      <p>Be part of the future. We’re building projects that push the boundaries...</p>
 
-    <div class="join-box" id="mainFormBox">
       <form id="contactForm">
         <input id="name" type="text" placeholder="Full Name" required>
         <input id="email" type="email" placeholder="Email Address" required>
         <textarea id="skills" rows="4" placeholder="Tell us about your skills & passion..." required></textarea>
         <button id="submitBtn" type="submit">🚀 Let’s Build the Future</button>
-        <div id="toast" class="toast hide"></div>
+        <div id="toast" class="toast"></div>
       </form>
-    </div>
-
-    <div class="join-box hide" id="otpBox">
-      <h3>Check your Email & click the link</h3>
-      <p>An OTP link was sent to your email. Open your email and verify!</p>
-      <div id="otpToast" class="toast hide"></div>
     </div>
   </section>
 
+  <!-- Sidebar swipe -->
+  <script>
+    const sidebar = document.getElementById("sidebar");
+    let startX = 0, endX = 0;
+    function toggleMenu(force) {
+      if (force === "open") sidebar.classList.add("active");
+      else if (force === "close") sidebar.classList.remove("active");
+      else sidebar.classList.toggle("active");
+    }
+    document.addEventListener("touchstart", (e)=>{ startX = e.touches[0].clientX; });
+    document.addEventListener("touchend", (e)=> {
+      endX = e.changedTouches[0].clientX;
+      let diffX = endX - startX;
+      if (diffX > 80 && !sidebar.classList.contains("active")) toggleMenu("open");
+      if (diffX < -80 && sidebar.classList.contains("active")) toggleMenu("close");
+    });
+  </script>
+
+  <!-- Firebase setup -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
       authDomain: "electromedics-84089.firebaseapp.com",
       projectId: "electromedics-84089",
-      storageBucket: "electromedics-84089.appspot.com",
+      storageBucket: "electromedics-84089.firebasestorage.app",
       messagingSenderId: "1068763862229",
       appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
     };
@@ -139,69 +243,55 @@
     const auth = getAuth(app);
 
     const form = document.getElementById('contactForm');
+    const btn  = document.getElementById('submitBtn');
     const toast = document.getElementById('toast');
-    const otpBox = document.getElementById('otpBox');
-    const otpToast = document.getElementById('otpToast');
-    const mainFormBox = document.getElementById('mainFormBox');
 
-    let userData = {};
-    const actionCodeSettings = {
-      url: window.location.href,
-      handleCodeInApp: true
-    };
-
-    function showToast(el, msg, ok=true){
-      el.textContent = msg;
-      el.classList.remove('hide');
-      el.classList.toggle('ok', ok);
-      el.classList.toggle('err', !ok);
-      setTimeout(()=>{ el.classList.add('hide'); el.textContent=''; }, 4000);
+    function showToast(msg, ok=true){
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      toast.className = 'toast ' + (ok ? 'ok' : 'err');
+      setTimeout(()=>{ toast.style.display='none'; toast.textContent=''; }, 4000);
     }
 
-    form.addEventListener('submit', async (e)=>{
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
+      const name   = document.getElementById('name').value.trim();
+      const email  = document.getElementById('email').value.trim();
       const skills = document.getElementById('skills').value.trim();
-      if(!name || !email || !skills) return showToast(toast,'All fields required!',false);
+      if(!name || !email || !skills) return showToast('All fields required!', false);
 
-      userData = {name,email,skills};
-      try{
-        await sendSignInLinkToEmail(auth,email,actionCodeSettings);
-        window.localStorage.setItem('emailForSignIn', email);
-        mainFormBox.classList.add('hide');
-        otpBox.classList.remove('hide');
-        showToast(otpToast,'OTP email sent! Check your inbox.');
-      }catch(err){
-        console.error(err);
-        showToast(otpToast,'Failed to send OTP email!',false);
-      }
-    });
+      const originalText = btn.textContent; 
+      btn.disabled = true; btn.textContent = 'Sending OTP…';
 
-    window.addEventListener('load', async ()=>{
-      if(isSignInWithEmailLink(auth, window.location.href)){
-        let email = window.localStorage.getItem('emailForSignIn');
-        if(!email) email = prompt('Enter your email for verification');
-        try{
-          await signInWithEmailLink(auth,email,window.location.href);
-          await addDoc(collection(db,'contacts'),{
-            ...userData,
-            email,
-            createdAt: serverTimestamp(),
-            userAgent: navigator.userAgent
-          });
-          showToast(otpToast,'Verified & saved successfully!');
-          otpBox.classList.add('hide');
-          mainFormBox.classList.remove('hide');
-        }catch(err){
-          console.error(err);
-          showToast(otpToast,'Verification failed!',false);
+      try {
+        const tempPass = Math.random().toString(36).slice(-8);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, tempPass);
+        const user = userCredential.user;
+
+        await sendEmailVerification(user);
+        showToast('verification sent! Check your email 📧, Just click the link 👆🏼', true);
+
+        let verified = false;
+        while(!verified){
+          await new Promise(r => setTimeout(r, 3000));
+          await user.reload();
+          if(user.emailVerified) verified = true;
         }
+
+        await addDoc(collection(db, 'contacts'), {
+          name, email, skills, createdAt: serverTimestamp(), userAgent: navigator.userAgent
+        });
+
+        form.reset();
+        showToast('Email verified & saved successfully 👋', true);
+
+      } catch(err){
+        console.error(err);
+        showToast('Error: '+err.message, false);
+      } finally {
+        btn.disabled = false; btn.textContent = originalText;
       }
     });
-
-    const sidebar = document.getElementById("sidebar");
-    function toggleMenu(){ sidebar.classList.toggle("active"); }
   </script>
 </body>
 </html>
