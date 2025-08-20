@@ -16,8 +16,6 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
-    /* 🌌 Floating Orb Background */
     body::before {
       content: "";
       position: fixed;
@@ -29,7 +27,6 @@
       animation: moveOrbs 18s ease-in-out infinite alternate;
       z-index: -1;
     }
-
     @keyframes moveOrbs {
       0%   { background-position: 10% 20%, 80% 70%, 50% 50%; }
       25%  { background-position: 20% 50%, 70% 60%, 60% 40%; }
@@ -37,8 +34,6 @@
       75%  { background-position: 30% 10%, 80% 50%, 60% 30%; }
       100% { background-position: 10% 20%, 80% 70%, 50% 50%; }
     }
-
-    /* Navbar */
     nav {
       background: linear-gradient(90deg, #0f0f1e, #0d213a);
       color: white;
@@ -59,109 +54,32 @@
     .nav-links a:hover { color: #00FF88; text-shadow: 0 0 8px #00FF88; cursor: pointer;}
     .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
     .menu-toggle div { width: 25px; height: 3px; background: white; border-radius: 3px; }
-
-    /* Sidebar */
-    .sidebar {
-      position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
-      background: rgba(20, 20, 30, 0.95); backdrop-filter: blur(10px);
-      border-right: 2px solid rgba(0,255,136,0.3); box-shadow: 4px 0 20px rgba(0,255,136,0.15);
-      padding-top: 80px; transition: 0.3s; z-index: 999;
-      touch-action: pan-y;
-    }
+    .sidebar { position: fixed; top: 0; left: -260px; width: 240px; height: 100%; background: rgba(20, 20, 30, 0.95); backdrop-filter: blur(10px); border-right: 2px solid rgba(0,255,136,0.3); box-shadow: 4px 0 20px rgba(0,255,136,0.15); padding-top: 80px; transition: 0.3s; z-index: 999; touch-action: pan-y; }
     .sidebar.active { left: 0; }
     .sidebar ul { list-style: none; padding: 0; }
     .sidebar ul li { margin: 25px 0; text-align: center; }
-    .sidebar ul li a {
-      color: #dcdcdc; text-decoration: none; font-size: 18px; transition: 0.3s;
-    }
+    .sidebar ul li a { color: #dcdcdc; text-decoration: none; font-size: 18px; transition: 0.3s; }
     .sidebar ul li a:hover { color: #00FF88; text-shadow: 0 0 10px #00FF88; }
-
-    /* Join Us Section */
-    section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 60px 20px;
-    }
-    section h2 {
-      font-size: 2.4rem;
-      margin-bottom: 15px;
-      text-shadow: 0 0 10px rgba(0,255,136,0.4);
-    }
-    section p {
-      max-width: 650px;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: #c9c9c9;
-      margin-bottom: 35px;
-    }
-
-    /* Join Box Glow Upgrade */
-    .join-box {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(0,255,136,0.25);
-      border-radius: 18px;
-      padding: 30px;
-      max-width: 500px;
-      width: 100%;
-      box-shadow: 0 0 20px rgba(0,255,136,0.25), 0 0 60px rgba(0,255,136,0.1) inset;
-      backdrop-filter: blur(8px);
-      transition: 0.3s;
-    }
+    section { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; }
+    section h2 { font-size: 2.4rem; margin-bottom: 15px; text-shadow: 0 0 10px rgba(0,255,136,0.4); }
+    section p { max-width: 650px; font-size: 1.1rem; line-height: 1.7; color: #c9c9c9; margin-bottom: 35px; }
+    .join-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.25); border-radius: 18px; padding: 30px; max-width: 500px; width: 100%; box-shadow: 0 0 20px rgba(0,255,136,0.25), 0 0 60px rgba(0,255,136,0.1) inset; backdrop-filter: blur(8px); transition: 0.3s; }
     .join-box:hover { transform: scale(1.02); }
-    .join-box input, .join-box textarea {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      outline: none;
-      font-size: 1rem;
-    }
-    .join-box input[type="file"] {
-      background: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .join-box button {
-      background: linear-gradient(90deg, #00FF88, #007BFF);
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 0 12px rgba(0,255,136,0.4);
-    }
-    .join-box button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 18px rgba(0,255,136,0.6);
-    }
-
-    /* Toast message */
+    .join-box input, .join-box textarea { width: 100%; margin-bottom: 15px; padding: 12px; border: none; border-radius: 8px; outline: none; font-size: 1rem; }
+    .join-box input[type="file"] { background: #fff; padding: 10px; border-radius: 8px; cursor: pointer; }
+    .join-box button { background: linear-gradient(90deg, #00FF88, #007BFF); color: #fff; border: none; padding: 12px 20px; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 0 12px rgba(0,255,136,0.4); }
+    .join-box button:hover { transform: scale(1.05); box-shadow: 0 0 18px rgba(0,255,136,0.6); }
     .toast{margin-top:14px; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1)}
     .toast.ok{border-color:rgba(34,197,94,.45)}
     .toast.err{border-color:rgba(239,68,68,.45)}
     .hide{display:none}
-
-    /* Responsive */
     @media screen and (max-width: 900px) { .nav-links { display: none; } .menu-toggle { display: flex; } }
     @media screen and (max-width: 768px) { section { padding: 40px 20px; } }
   </style>
 </head>
 <body>
-  <!-- Navbar -->
   <nav>
-    <div class="logo-section">
-      <img src="electromedics_background.png" alt="Logo">
-      <h1>ElectroMedics</h1>
-    </div>
+    <div class="logo-section"><img src="electromedics_background.png" alt="Logo"><h1>ElectroMedics</h1></div>
     <div class="nav-links">
       <a href="index.html">HOME</a>
       <a href="about.html">ABOUT US</a>
@@ -169,14 +87,10 @@
       <a href="media.html">MEDIA</a>
       <a href="join.html">JOIN US</a>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <div></div><div></div><div></div>
-    </div>
+    <div class="menu-toggle" onclick="toggleMenu()"><div></div><div></div><div></div></div>
   </nav>
-
-  <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
-    <ul >
+    <ul>
       <li><a href="index.html">HOME</a></li>
       <li><a href="about.html">ABOUT US</a></li>
       <li><a href="projects.html">PROJECTS</a></li>
@@ -185,16 +99,11 @@
     </ul>
   </div>
 
-  <!-- Join Us Content -->
   <section>
     <h2>Join ElectroMedics</h2>
-    <p>
-      Be part of the future. We’re building projects that push the boundaries of imagination and innovation.  
-      Whether you're a tech enthusiast, designer, or innovator — there’s a place for you here.  
-      Fill out the form below and take your first step into creating something extraordinary with us.
-    </p>
+    <p>Be part of the future. We’re building projects that push the boundaries of imagination and innovation. Fill out the form below and take your first step into creating something extraordinary with us.</p>
 
-    <div class="join-box">
+    <div class="join-box" id="mainFormBox">
       <form id="contactForm">
         <input id="name" type="text" placeholder="Full Name" required>
         <input id="email" type="email" placeholder="Email Address" required>
@@ -203,95 +112,100 @@
         <div id="toast" class="toast hide"></div>
       </form>
     </div>
+
+    <div class="join-box hide" id="otpBox">
+      <h3>Enter OTP sent to your Email</h3>
+      <input id="otpInput" type="text" placeholder="6-digit OTP">
+      <button id="verifyBtn">Verify OTP</button>
+      <div id="otpToast" class="toast hide"></div>
+    </div>
   </section>
 
-  <script>
-    const sidebar = document.getElementById("sidebar");
-    let startX=0, currentX=0, touching=false;
-
-    function toggleMenu(){ sidebar.classList.toggle("active"); }
-
-    sidebar.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-      touching = true;
-      sidebar.style.transition = "none";
-    });
-
-    sidebar.addEventListener("touchmove", e => {
-      if(!touching) return;
-      currentX = e.touches[0].clientX;
-      let diff = currentX - startX;
-      if(sidebar.classList.contains("active")) sidebar.style.left = Math.min(diff,0)+"px";
-      else sidebar.style.left = Math.min(diff-240,0)+"px";
-    });
-
-    sidebar.addEventListener("touchend", () => {
-      touching=false;
-      sidebar.style.transition="0.3s";
-      const delta = currentX - startX;
-      if(sidebar.classList.contains("active") && delta < -80) sidebar.classList.remove("active");
-      if(!sidebar.classList.contains("active") && delta > 80) sidebar.classList.add("active");
-      sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px";
-    });
-  </script>
-
-  <!-- Firebase setup -->
   <script type="module">
-    // 1) Replace with your Firebase project config
-    const firebaseConfig = {
-  apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
-  authDomain: "electromedics-84089.firebaseapp.com",
-  projectId: "electromedics-84089",
-  storageBucket: "electromedics-84089.firebasestorage.app",
-  messagingSenderId: "1068763862229",
-  appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
-};
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQ81mKHZb4-4BLUtaCzIu8utCwoEoAlRo",
+      authDomain: "electromedics-84089.firebaseapp.com",
+      projectId: "electromedics-84089",
+      storageBucket: "electromedics-84089.firebasestorage.app",
+      messagingSenderId: "1068763862229",
+      appId: "1:1068763862229:web:8226ee2a442cf3465d3e5c"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
 
     const form = document.getElementById('contactForm');
-    const btn  = document.getElementById('submitBtn');
+    const btn = document.getElementById('submitBtn');
     const toast = document.getElementById('toast');
+    const otpBox = document.getElementById('otpBox');
+    const otpInput = document.getElementById('otpInput');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const otpToast = document.getElementById('otpToast');
+    const mainFormBox = document.getElementById('mainFormBox');
 
-    function showToast(msg, ok=true){
-      toast.textContent = msg;
-      toast.classList.remove('hide');
-      toast.classList.toggle('ok', ok);
-      toast.classList.toggle('err', !ok);
-      setTimeout(()=>{ toast.classList.add('hide'); toast.textContent=''; }, 4000);
+    let userData = {};
+
+    function showToast(el, msg, ok=true){
+      el.textContent = msg;
+      el.classList.remove('hide');
+      el.classList.toggle('ok', ok);
+      el.classList.toggle('err', !ok);
+      setTimeout(()=>{ el.classList.add('hide'); el.textContent=''; }, 4000);
     }
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    function generateOTP() { return Math.floor(100000 + Math.random()*900000).toString(); }
+    let currentOTP = '';
 
-      const name   = document.getElementById('name').value.trim();
-      const email  = document.getElementById('email').value.trim();
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
       const skills = document.getElementById('skills').value.trim();
 
-      if (!name || !email || !skills) return showToast('All fields required!', false);
+      if(!name || !email || !skills) return showToast(toast,'All fields required!',false);
 
-      const originalText = btn.textContent; btn.disabled = true; btn.textContent = 'Sending…';
+      userData = {name,email,skills};
+      currentOTP = generateOTP();
+      console.log('OTP for debug:', currentOTP); // In prod, send email via backend
 
-      try {
-        await addDoc(collection(db, 'contacts'), {
-          name,
-          email,
-          skills,
-          createdAt: serverTimestamp(),
-          userAgent: navigator.userAgent
-        });
-        form.reset();
-        showToast('Saved successfully. We\'ll be in touch 👋', true);
-      } catch (err) {
-        console.error('Firebase error:', err);
-        showToast('Not sent. Firebase error — check console.', false);
-      } finally {
-        btn.disabled = false; btn.textContent = originalText;
+      mainFormBox.classList.add('hide');
+      otpBox.classList.remove('hide');
+      showToast(otpToast, 'OTP sent to '+email);
+    });
+
+    verifyBtn.addEventListener('click', async ()=>{
+      const val = otpInput.value.trim();
+      if(val===currentOTP){
+        try{
+          await addDoc(collection(db,'contacts'),{
+            ...userData,
+            createdAt: serverTimestamp(),
+            userAgent: navigator.userAgent
+          });
+          showToast(otpToast,'Verified & saved successfully!');
+          otpBox.classList.add('hide');
+          form.reset();
+          mainFormBox.classList.remove('hide');
+        }catch(err){
+          console.error(err);
+          showToast(otpToast,'Firebase error. Check console!',false);
+        }
+      }else{
+        showToast(otpToast,'Invalid OTP!',false);
       }
     });
+
+    const sidebar = document.getElementById("sidebar");
+    let startX=0, currentX=0, touching=false;
+    function toggleMenu(){ sidebar.classList.toggle("active"); }
+    sidebar.addEventListener("touchstart", e=>{ startX = e.touches[0].clientX; touching=true; sidebar.style.transition="none"; });
+    sidebar.addEventListener("touchmove", e=>{ if(!touching) return; currentX=e.touches[0].clientX; let diff=currentX-startX; sidebar.style.left = sidebar.classList.contains("active") ? Math.min(diff,0)+"px" : Math.min(diff-240,0)+"px"; });
+    sidebar.addEventListener("touchend", ()=>{ touching=false; sidebar.style.transition="0.3s"; const delta=currentX-startX; if(sidebar.classList.contains("active")&&delta<-80) sidebar.classList.remove("active"); if(!sidebar.classList.contains("active")&&delta>80) sidebar.classList.add("active"); sidebar.style.left = sidebar.classList.contains("active") ? "0" : "-240px"; });
   </script>
 </body>
 </html>
